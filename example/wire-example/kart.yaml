@@ -1,0 +1,12 @@
+server:
+  name: kart
+  mode: debug
+  healthz: true
+
+insecure:
+  bind-address: 0.0.0.0
+  bind-port: 8080
+
+feature:
+  enable-metrics: true # 开启 metrics, router:  /metrics
+  profiling: true # 开启性能分析, 可以通过 <host>:<port>/debug/pprof/地址查看程序栈、线程等系统信息，默认值为 true
