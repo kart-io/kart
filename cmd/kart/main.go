@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kart-io/kart/cmd/kart/internal/options"
 	"log"
 
 	"github.com/kart-io/kart/cmd/kart/internal/run"
@@ -19,8 +20,15 @@ func init() {
 	rootCmd.AddCommand(run.CmdRun)
 }
 
+// main is the entry point for the CLI
+
 func main() {
-	if err := rootCmd.Execute(); err != nil {
+	app := options.NewApp(
+		"kart",
+		options.WithDescription("Kart is a tool for go microservices"),
+	)
+
+	if err := app.Run(); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -15,7 +15,7 @@ import (
 var CmdRun = &cobra.Command{
 	Use:   "run",
 	Short: "Run project",
-	Long:  "Run project. Example: kratos run",
+	Long:  "Run project. Example: kart run",
 	Run:   Run,
 }
 var targetDir string
@@ -72,7 +72,6 @@ func Run(cmd *cobra.Command, args []string) {
 	fd.Stdout = os.Stdout
 	fd.Stderr = os.Stderr
 	fd.Dir = dir
-	fmt.Println(dir)
 	changeWorkingDirectory(fd, targetDir)
 	if err := fd.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err.Error())
