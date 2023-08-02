@@ -30,19 +30,22 @@ func Run(cmd *cobra.Command, args []string) error {
 	}
 	base, err := os.Getwd()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
 		return err
 	}
 	if dir == "" {
 		// find the directory containing the cmd/*
 		cmdPath, err := findCMD(base)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
+			_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
 			return err
 		}
 		switch len(cmdPath) {
 		case 0:
-			fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", "The cmd directory cannot be found in the current directory")
+			_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", "The cmd directory cannot be found in the current directory")
+			if err != nil {
+				return err
+			}
 			return nil
 		case 1:
 			for _, v := range cmdPath {
@@ -71,7 +74,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	fd.Dir = dir
 	changeWorkingDirectory(fd, targetDir)
 	if err := fd.Run(); err != nil {
-		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err.Error())
+		_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err.Error())
 		return err
 	}
 	return nil
