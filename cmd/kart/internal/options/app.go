@@ -25,7 +25,9 @@ type App struct {
 }
 
 func NewApp(basename string, opts ...Option) *App {
-	a := &App{}
+	a := &App{
+		basename: basename,
+	}
 	for _, o := range opts {
 		o(a)
 	}
@@ -35,27 +37,22 @@ func NewApp(basename string, opts ...Option) *App {
 
 func (a *App) buildCommand() {
 	cmd := cobra.Command{
-		Use:           FormatBaseName(a.basename),
-		Short:         "kart",
-		Long:          a.description,
-		Version:       version.Release,
-		SilenceUsage:  true,
-		SilenceErrors: true,
+		Use:     FormatBaseName(a.basename),
+		Short:   "kart",
+		Long:    a.description,
+		Version: version.Release,
 	}
-
 	// cmd.SetUsageTemplate(usageTemplate)
 	cmd.SetOut(os.Stdout)
 	cmd.SetErr(os.Stderr)
 	cmd.Flags().SortFlags = true
 	commands.InitFlags(cmd.Flags())
-
 	if len(a.commands) > 0 {
 		for _, c := range a.commands {
 			cmd.AddCommand(c.CobraCommand())
 		}
 		cmd.SetHelpCommand(commands.HelpCommand(FormatBaseName(a.basename)))
 	}
-
 	if a.runFunc != nil {
 		cmd.RunE = a.runCommand
 	}
@@ -67,8 +64,12 @@ func (a *App) buildCommand() {
 			fs.AddFlagSet(f)
 		}
 	}
-
 	a.cmd = &cmd
+}
+
+// Command returns cobra command instance inside the application.
+func (a *App) Command() *cobra.Command {
+	return a.cmd
 }
 
 func (a *App) Run() error {

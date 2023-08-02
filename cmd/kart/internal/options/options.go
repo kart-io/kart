@@ -26,3 +26,9 @@ func WithDescription(description string) Option {
 		a.description = description
 	}
 }
+
+func WithCommands(commands ...*commands.Command) Option {
+	return func(a *App) {
+		a.commands = append(a.commands, commands...)
+	}
+}

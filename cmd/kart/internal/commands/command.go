@@ -25,7 +25,7 @@ func WithCommandOptions(opts CliOptions) CommandOption {
 }
 
 // RunCommandFunc defines the application's command startup callback function.
-type RunCommandFunc func(args []string) error
+type RunCommandFunc func(cmd *cobra.Command, args []string) error
 
 // WithCommandRunFunc sets the command run function.
 func WithCommandRunFunc(runFunc RunCommandFunc) CommandOption {
@@ -80,7 +80,7 @@ func (c *Command) CobraCommand() *cobra.Command {
 
 func (c *Command) runCommand(cmd *cobra.Command, args []string) {
 	if c.runFunc != nil {
-		if err := c.runFunc(args); err != nil {
+		if err := c.runFunc(cmd, args); err != nil {
 			fmt.Printf("%v %v\n", color.RedString("Error:"), err)
 			os.Exit(1)
 		}

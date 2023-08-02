@@ -2,6 +2,7 @@ package run
 
 import (
 	"fmt"
+	"github.com/kart-io/kart/cmd/kart/internal/commands"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -11,21 +12,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// CmdRun run project command.
-var CmdRun = &cobra.Command{
-	Use:   "run",
-	Short: "Run project",
-	Long:  "Run project. Example: kart run",
-	Run:   Run,
+func AddRun() *commands.Command {
+	cli := commands.NewCommand("run", "Run project. Example: kart run", commands.WithCommandRunFunc(func(cmd *cobra.Command, args []string) error {
+		return Run(cmd, args)
+	}))
+	return cli
 }
+
 var targetDir string
 
-func init() {
-	CmdRun.Flags().StringVarP(&targetDir, "work", "w", "", "target working directory")
-}
-
 // Run project.
-func Run(cmd *cobra.Command, args []string) {
+func Run(cmd *cobra.Command, args []string) error {
 	var dir string
 	cmdArgs, programArgs := splitArgs(cmd, args)
 	if len(cmdArgs) > 0 {
@@ -34,19 +31,19 @@ func Run(cmd *cobra.Command, args []string) {
 	base, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
-		return
+		return err
 	}
 	if dir == "" {
 		// find the directory containing the cmd/*
 		cmdPath, err := findCMD(base)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
-			return
+			return err
 		}
 		switch len(cmdPath) {
 		case 0:
 			fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", "The cmd directory cannot be found in the current directory")
-			return
+			return nil
 		case 1:
 			for _, v := range cmdPath {
 				dir = v
@@ -63,7 +60,7 @@ func Run(cmd *cobra.Command, args []string) {
 			}
 			e := survey.AskOne(prompt, &dir)
 			if e != nil || dir == "" {
-				return
+				return nil
 			}
 			dir = cmdPath[dir]
 		}
@@ -75,8 +72,9 @@ func Run(cmd *cobra.Command, args []string) {
 	changeWorkingDirectory(fd, targetDir)
 	if err := fd.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err.Error())
-		return
+		return err
 	}
+	return nil
 }
 
 func splitArgs(cmd *cobra.Command, args []string) (cmdArgs, programArgs []string) {
