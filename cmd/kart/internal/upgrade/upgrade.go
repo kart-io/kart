@@ -8,13 +8,12 @@ import (
 )
 
 func Command() *cobra.Command {
-	command := app.NewCommand("run", "This is the run command", func(cmd *cobra.Command, args []string) {
+	command := app.NewCommand("upgrade", "This is the upgrade command", func(cmd *cobra.Command, args []string) {
 		Run(cmd, args)
 	})
 	return command
 }
 
-// Run upgrade the kratos tools.
 func Run(_ *cobra.Command, _ []string) {
 	err := base.GoInstall(
 		"github.com/kart-io/kart/cmd/kart@latest",
