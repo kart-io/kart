@@ -24,13 +24,16 @@ RUN go mod download
 COPY . .
 # build go
 # RUN go build -o /main main.go
-RUN CGO_ENABLED=0 GOOS=linux go build -o /main main.go
-
+RUN CGO_ENABLED=0 GOOS=linux go build -o /kart main.go wire_gen.go
+RUN ls
 # use alpine:3 image run image
 FROM alpine:3
-COPY --from=builder main /bin/main
-ENTRYPOINT ["/bin/main"]
-`
+WORKDIR /build
+COPY --from=builder  /build/kart.yaml /build/kart.yaml
+COPY --from=builder kart /build/kart
+
+
+ENTRYPOINT ["/build/kart"]`
 
 func Command() *cobra.Command {
 	command := app.NewCommand("image", "This is the image command", func(cmd *cobra.Command, args []string) {
