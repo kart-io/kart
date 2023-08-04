@@ -16,7 +16,6 @@ COPY . .
 # build go
 # RUN go build -o /main main.go
 RUN CGO_ENABLED=0 GOOS=linux go build -o /kart main.go wire_gen.go
-RUN ls
 # use alpine:3 image run image
 FROM alpine:3
 WORKDIR /build
