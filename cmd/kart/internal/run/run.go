@@ -14,8 +14,8 @@ import (
 
 var targetDir string
 
-func RunCommand() *cobra.Command {
-	command := app.NewCommand("run", "This is the second command", func(cmd *cobra.Command, args []string) {
+func Command() *cobra.Command {
+	command := app.NewCommand("run", "This is the run command", func(cmd *cobra.Command, args []string) {
 		Run(cmd, args)
 	})
 	command.Flags().StringVarP(&targetDir, "work", "w", "", "target working directory")

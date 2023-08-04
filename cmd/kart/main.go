@@ -10,7 +10,7 @@ func main() {
 	newApp := app.NewApp(
 		"kart",
 		app.WithCommand(
-			run.RunCommand(),
+			run.Command(),
 		),
 	)
 	if err := newApp.Execute(); err != nil {
