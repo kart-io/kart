@@ -22,5 +22,4 @@ WORKDIR /build
 COPY --from=builder  /build/kart.yaml /build/kart.yaml
 COPY --from=builder kart /build/kart
 
-
 ENTRYPOINT ["/build/kart"]
