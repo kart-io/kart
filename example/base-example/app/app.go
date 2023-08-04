@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
+
 	"github.com/kart-io/kart/transports"
 	kart_grpc "github.com/kart-io/kart/transports/kart-grpc"
 	kartHttp "github.com/kart-io/kart/transports/kart-http"

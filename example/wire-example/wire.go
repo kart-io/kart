@@ -5,6 +5,7 @@ package main
 
 import (
 	"github.com/google/wire"
+
 	"github.com/kart-io/kart/example/wire-example/app"
 )
 

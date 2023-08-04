@@ -2,7 +2,6 @@ package run
 
 import (
 	"fmt"
-	"github.com/kart-io/kart/cmd/kart/app"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -10,6 +9,8 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/spf13/cobra"
+
+	"github.com/kart-io/kart/cmd/kart/app"
 )
 
 var targetDir string

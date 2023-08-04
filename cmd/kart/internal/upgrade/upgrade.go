@@ -2,9 +2,11 @@ package upgrade
 
 import (
 	"fmt"
+
+	"github.com/spf13/cobra"
+
 	"github.com/kart-io/kart/cmd/kart/app"
 	"github.com/kart-io/kart/cmd/kart/internal/base"
-	"github.com/spf13/cobra"
 )
 
 func Command() *cobra.Command {

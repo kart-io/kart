@@ -1,15 +1,18 @@
 package image
 
 import (
-	"github.com/kart-io/kart/cmd/kart/app"
-	"github.com/spf13/cobra"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/spf13/cobra"
+
+	"github.com/kart-io/kart/cmd/kart/app"
 )
 
-var fileName = "Dockerfile"
-var dockerfile = `# build go code image
+var (
+	fileName   = "Dockerfile"
+	dockerfile = `# build go code image
 # usr golang version 1.19 image
 FROM golang:1.19-alpine as builder
 LABEL stage=gobuilder
@@ -34,6 +37,7 @@ COPY --from=builder  /build/kart.yaml /build/kart.yaml
 COPY --from=builder kart /build/kart
 
 ENTRYPOINT ["/build/kart"]`
+)
 
 func Command() *cobra.Command {
 	command := app.NewCommand("image", "This is the image command", func(cmd *cobra.Command, args []string) {
@@ -50,7 +54,7 @@ func Run(_ *cobra.Command, _ []string) {
 
 	filePath := filepath.Join(filePwd, fileName)
 
-	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o666)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -2,8 +2,10 @@ package app
 
 import (
 	"fmt"
-	"github.com/kart-io/kart/cmd/kart/version"
+
 	"github.com/spf13/cobra"
+
+	"github.com/kart-io/kart/cmd/kart/version"
 )
 
 type Option func(*App)
