@@ -2,7 +2,7 @@ package run
 
 import (
 	"fmt"
-	"github.com/kart-io/kart/cmd/kart/internal/commands"
+	"github.com/kart-io/kart/cmd/kart/app"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -12,17 +12,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func AddRun() *commands.Command {
-	cli := commands.NewCommand("run", "Run project. Example: kart run", commands.WithCommandRunFunc(func(cmd *cobra.Command, args []string) error {
-		return Run(cmd, args)
-	}))
-	return cli
-}
-
 var targetDir string
 
+func RunCommand() *cobra.Command {
+	command := app.NewCommand("run", "This is the second command", func(cmd *cobra.Command, args []string) {
+		Run(cmd, args)
+	})
+	command.Flags().StringVarP(&targetDir, "work", "w", "", "target working directory")
+	return command
+}
+
 // Run project.
-func Run(cmd *cobra.Command, args []string) error {
+func Run(cmd *cobra.Command, args []string) {
 	var dir string
 	cmdArgs, programArgs := splitArgs(cmd, args)
 	if len(cmdArgs) > 0 {
@@ -31,28 +32,23 @@ func Run(cmd *cobra.Command, args []string) error {
 	base, err := os.Getwd()
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
-		return err
+		return
 	}
 	if dir == "" {
-		// find the directory containing the cmd/*
 		cmdPath, err := findCMD(base)
 		if err != nil {
 			_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
-			return err
+			return
 		}
 		switch len(cmdPath) {
 		case 0:
 			_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", "The cmd directory cannot be found in the current directory")
-			if err != nil {
-				return err
-			}
-			return nil
 		case 1:
 			for _, v := range cmdPath {
 				dir = v
 			}
 		default:
-			var cmdPaths []string
+			cmdPaths := make([]string, len(cmdPath))
 			for k := range cmdPath {
 				cmdPaths = append(cmdPaths, k)
 			}
@@ -63,7 +59,7 @@ func Run(cmd *cobra.Command, args []string) error {
 			}
 			e := survey.AskOne(prompt, &dir)
 			if e != nil || dir == "" {
-				return nil
+				return
 			}
 			dir = cmdPath[dir]
 		}
@@ -75,9 +71,9 @@ func Run(cmd *cobra.Command, args []string) error {
 	changeWorkingDirectory(fd, targetDir)
 	if err := fd.Run(); err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err.Error())
-		return err
+		return
 	}
-	return nil
+	return
 }
 
 func splitArgs(cmd *cobra.Command, args []string) (cmdArgs, programArgs []string) {
