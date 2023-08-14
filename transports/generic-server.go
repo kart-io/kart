@@ -7,13 +7,13 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/kart-io/kart"
+	"github.com/costa92/errors"
+	"github.com/costa92/logger"
 	"github.com/segmentio/ksuid"
 	"go.uber.org/automaxprocs/maxprocs"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/costa92/errors"
-	"github.com/costa92/logger"
+	"github.com/kart-io/kart"
 )
 
 // ID returns app instance id.

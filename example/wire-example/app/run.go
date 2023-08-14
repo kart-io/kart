@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/kart-io/kart/example/wire-example/config"
 	"github.com/kart-io/kart/example/wire-example/controller"
 	"github.com/kart-io/kart/example/wire-example/routers"

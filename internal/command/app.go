@@ -3,12 +3,12 @@ package command
 import (
 	"os"
 
+	"github.com/costa92/logger"
 	"github.com/fatih/color"
-	"github.com/kart-io/kart/pkg/cliflag"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/costa92/logger"
+	"github.com/kart-io/kart/pkg/cliflag"
 )
 
 var progressMessage = color.GreenString("==>")

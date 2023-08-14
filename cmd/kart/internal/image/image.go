@@ -1,14 +1,18 @@
 package image
 
 import (
-	"fmt"
+	"log"
 	"os"
+	"path/filepath"
+
+	"github.com/spf13/cobra"
 
 	"github.com/kart-io/kart/cmd/kart/app"
-	"github.com/spf13/cobra"
 )
 
-var dockerfile = `# build go code image
+var (
+	fileName   = "Dockerfile"
+	dockerfile = `# build go code image
 # usr golang version 1.19 image
 FROM golang:1.19-alpine as builder
 LABEL stage=gobuilder
@@ -25,13 +29,15 @@ RUN go mod download
 COPY . .
 # build go
 # RUN go build -o /main main.go
-RUN CGO_ENABLED=0 GOOS=linux go build -o /main main.go
-
+RUN CGO_ENABLED=0 GOOS=linux go build -o /kart main.go wire_gen.go
 # use alpine:3 image run image
 FROM alpine:3
-COPY --from=builder main /bin/main
-ENTRYPOINT ["/bin/main"]
-`
+WORKDIR /build
+COPY --from=builder  /build/kart.yaml /build/kart.yaml
+COPY --from=builder kart /build/kart
+
+ENTRYPOINT ["/build/kart"]`
+)
 
 func Command() *cobra.Command {
 	command := app.NewCommand("image", "This is the image command", func(cmd *cobra.Command, args []string) {
@@ -41,13 +47,24 @@ func Command() *cobra.Command {
 }
 
 func Run(_ *cobra.Command, _ []string) {
-	fileName := "Dockerfile"
-	f, err := os.Create(fileName)
-	defer f.Close()
+	filePwd, err := os.Getwd()
 	if err != nil {
-		fmt.Println(err.Error())
-	} else {
-		_, err = f.Write([]byte(dockerfile))
-		cobra.CheckErr(err)
+		log.Fatal(err)
 	}
+
+	filePath := filepath.Join(filePwd, fileName)
+
+	f, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close() // 关闭文件
+
+	_, err = f.Write([]byte(dockerfile))
+	cobra.CheckErr(err)
+}
+
+func isFileExist(filePath string) bool {
+	_, err := os.Stat(filePath)
+	return !os.IsNotExist(err)
 }

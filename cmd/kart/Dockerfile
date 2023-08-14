@@ -15,9 +15,11 @@ RUN go mod download
 COPY . .
 # build go
 # RUN go build -o /main main.go
-RUN CGO_ENABLED=0 GOOS=linux go build -o /main main.go
-
+RUN CGO_ENABLED=0 GOOS=linux go build -o /kart main.go wire_gen.go
 # use alpine:3 image run image
 FROM alpine:3
-COPY --from=builder main /bin/main
-ENTRYPOINT ["/bin/main"]
+WORKDIR /build
+COPY --from=builder  /build/kart.yaml /build/kart.yaml
+COPY --from=builder kart /build/kart
+
+ENTRYPOINT ["/build/kart"]
