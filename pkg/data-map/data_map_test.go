@@ -6,15 +6,16 @@ import (
 )
 
 func Test_IntNewDataMapOption(t *testing.T) {
-	opt := NewDataMapOption(map[any]any{
-		1: 1,
-		2: 2,
+	opt := NewDataMapOption(map[int]string{
+		1:  "12312",
+		11: "123",
 	})
 
-	data := opt.keys
+	data := opt.Keys()
 	fmt.Println(data)
 
-	fmt.Println(opt.Option(2))
+	fmt.Println(opt.Option(1))
+	fmt.Println(opt.Options())
 }
 
 func TestName(t *testing.T) {
