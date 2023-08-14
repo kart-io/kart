@@ -23,7 +23,6 @@ func TestName(t *testing.T) {
 		1: 1,
 	})
 	fmt.Println(data)
-
 }
 
 func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
