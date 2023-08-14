@@ -1,5 +1,7 @@
 package data_map
 
+import "sort"
+
 type DataType interface {
 	int | int8 | int16 | int32 | int64 | string | float32 | float64
 }
@@ -25,6 +27,9 @@ func NewDataMapOption[KEYS, VALUE DataType](options DataMap[KEYS, VALUE]) *DataM
 }
 
 func (o *DataMapOption[KEYS, VALUE]) Keys() []KEYS {
+	sort.Slice(o.keys, func(i, j int) bool {
+		return o.keys[j] > o.keys[i]
+	})
 	return o.keys
 }
 
