@@ -1,11 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/kart-io/kart/cmd/kart/app"
 	"github.com/kart-io/kart/cmd/kart/internal/image"
 	"github.com/kart-io/kart/cmd/kart/internal/run"
 	"github.com/kart-io/kart/cmd/kart/internal/upgrade"
-	"log"
 )
 
 func main() {

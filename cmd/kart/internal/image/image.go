@@ -2,9 +2,10 @@ package image
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/kart-io/kart/cmd/kart/app"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var dockerfile = `# build go code image

@@ -2,6 +2,7 @@ package upgrade
 
 import (
 	"fmt"
+
 	"github.com/kart-io/kart/cmd/kart/app"
 	"github.com/kart-io/kart/cmd/kart/internal/base"
 	"github.com/spf13/cobra"

@@ -2,13 +2,13 @@ package run
 
 import (
 	"fmt"
-	"github.com/kart-io/kart/cmd/kart/app"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/kart-io/kart/cmd/kart/app"
 	"github.com/spf13/cobra"
 )
 
