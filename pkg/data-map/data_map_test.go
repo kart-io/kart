@@ -33,3 +33,12 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 	}
 	return s
 }
+
+func BenchmarkNewDataMapOption(t *testing.B) {
+	opt := NewDataMapOption(map[string]string{
+		"1":  "12312",
+		"23": "12312",
+	})
+	data := opt.Keys()
+	fmt.Println(data)
+}

@@ -20,6 +20,7 @@ func NewDataMapOption[KEYS, VALUE DataType](options DataMap[KEYS, VALUE]) *DataM
 	for k := range options {
 		keys = append(keys, k)
 	}
+	sortKeys(keys)
 	return &DataMapOption[KEYS, VALUE]{
 		keys:    keys,
 		options: options,
@@ -27,9 +28,6 @@ func NewDataMapOption[KEYS, VALUE DataType](options DataMap[KEYS, VALUE]) *DataM
 }
 
 func (o *DataMapOption[KEYS, VALUE]) Keys() []KEYS {
-	sort.Slice(o.keys, func(i, j int) bool {
-		return o.keys[j] > o.keys[i]
-	})
 	return o.keys
 }
 
@@ -39,4 +37,10 @@ func (o *DataMapOption[KEYS, VALUE]) Option(key KEYS) VALUE {
 
 func (o *DataMapOption[KEYS, VALUE]) Options() DataMap[KEYS, VALUE] {
 	return o.options
+}
+
+func sortKeys[T DataType](keys []T) {
+	sort.Slice(keys, func(i, j int) bool {
+		return keys[j] > keys[i]
+	})
 }
