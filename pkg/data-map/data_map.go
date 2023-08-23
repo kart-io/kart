@@ -44,3 +44,13 @@ func sortKeys[T DataType](keys []T) {
 		return keys[j] > keys[i]
 	})
 }
+
+// GetMapKey type DataMap[KEYS DataType, VALUE DataType] map[KEYS]VALUE
+// eg: GetMapKey[uint32, string](map[uint32]string{1: "1"}, 1)
+func GetMapKey[KEYS, VALUE DataType](m DataMap[KEYS, VALUE], key KEYS) VALUE {
+	var value VALUE
+	if v, ok := m[key]; ok {
+		return v
+	}
+	return value
+}
